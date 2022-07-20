@@ -1,0 +1,178 @@
+1. Database
+
+use document_practice;
+
+2. Object
+
+{
+    "firstName": "Ridwan",
+    "surname": "Kawsar",
+    "age": 27,
+    "height": 174,
+    "hobbies":  [
+        "Gaming",
+        "Football",
+        "Calisthenics"
+    ]   
+} 
+
+3. Object inside a collection
+
+db.people.insertOne({
+    "firstName": "Ridwan",
+    "surname": "Kawsar",
+    "age": 27,
+    "height": 174,
+    "hobbies":  [
+        "Gaming",
+        "Football",
+        "Calisthenics"
+    ]   
+})
+
+4. Objects inside multiple collections
+
+db.people.insertMany(
+[
+    {
+        "firstName": "Jordan",
+        "surname": "Harrison",
+        "age": 25,
+        "height": 182,
+        "hobbies":  [
+            "Gaming",
+            "Reading",
+            "Writing course-ware"
+        ]   
+    },
+    {
+        "firstName": "Bill",
+        "surname": "Smith",
+        "age": 28,
+        "height": 167,
+        "hobbies":  [
+            "Philately",
+            "Knitting"
+        ]   
+    },
+    {
+        "firstName": "Ben",
+        "surname": "Smith",
+        "age": 32,
+        "height": 157,
+        "hobbies":  [
+            "Poker",
+            "Blackjack"
+        ]   
+    },
+    {
+        "firstName": "Sally",
+        "surname": "Brown",
+        "age": 34,
+        "height": 189,
+        "hobbies":  [
+            "Football",
+            "Air Guitar",
+            "Climbing"
+        ]   
+    },
+    {
+        "firstName": "Emily",
+        "surname": "Poole",
+        "age": 42,
+        "height": 174,
+        "hobbies":  [
+            "Go-Karting",
+            "Ultimate Frisbee"
+        ]   
+    }
+])
+
+5. Ben starts playing roulette.
+
+db.people.updateOne(
+    {
+        "firstName": "Ben",
+        "surname": "Smith"
+    },
+    {
+        "$push": {
+            "hobbies": "Roulette"
+        }
+    }
+)
+
+6. Sally stops playing air guitar.
+
+db.people.updateOne(
+    {
+        firstName: "Sally",
+        surname: "Brown"
+    },
+    { 
+        $pull: { 
+            hobbies: 
+			{ $in: ["Air Guitar"] }
+            }
+    }
+)
+
+7. Age > 50
+
+db.people.find(
+    {
+        "age": { "$gte": 50 }
+    }
+)
+
+8. Age < 30, first name, last name
+
+db.people.find(
+    {
+        "age": { "$lte": 30 }
+    },
+    {
+	  "_id": false,
+        "firstName": true,
+        "surname": true
+    }
+)
+
+9. Age > 30, wears glasses
+
+db.people.updateMany(
+    {
+        "age": { "$gte": 30 }
+    },
+    {
+	  "$set": { "glasses": true }
+    }
+)
+
+10. Delete everyone not wearing glasses
+
+db.people.deleteMany(
+    {
+	  "glasses": { "$ne": true } 
+    }
+)
+
+11. Ben decides to buy a dog, update his document in the collection to have an 
+*embedded* document representing this dog (name this field 'pet'). 
+Make sure to give the embedded doc sufficient information (e.g. name, age, species)
+
+db.people.updateOne(
+	{
+		"firstName": "Ben",
+		"surname": "Smith",
+	},
+	{
+		"$set": {
+			"pet": {
+				"name": "Mad Max",
+				"age": 10,
+				"species": "dog"
+    				}
+			}
+	}	
+)
